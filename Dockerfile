@@ -10,7 +10,7 @@ COPY package.json ./
 # зависимости
 RUN --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
     --mount=type=bind,source=pnpm-workspace.yaml,target=pnpm-workspace.yaml \
-  pnpm ci --frozen-lockfile
+  pnpm install --frozen-lockfile
 
 COPY src ./src
 COPY test ./test
@@ -29,7 +29,7 @@ ENV NODE_ENV=production
 RUN --mount=type=bind,source=package.json,target=package.json \
   --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
   --mount=type=bind,source=pnpm-workspace.yaml,target=pnpm-workspace.yaml \
-  pnpm ci --prod --frozen-lockfile
+  pnpm install --prod --frozen-lockfile
 
 COPY --from=builder /app/dist/ ./dist/
 CMD exec node dist/main.js
