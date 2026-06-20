@@ -8,7 +8,8 @@ WORKDIR /app
 COPY package.json ./
 
 # зависимости
-RUN --mount=type=bind,source=package-lock.json,target=package-lock.json \
+RUN --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
+    --mount=type=bind,source=pnpm-workspace.yaml,target=pnpm-workspace.yaml \
   pnpm ci
 
 COPY src ./src
@@ -26,7 +27,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 RUN --mount=type=bind,source=package.json,target=package.json \
-  --mount=type=bind,source=package-lock.json,target=package-lock.json \
+  --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
+  --mount=type=bind,source=pnpm-workspace.yaml,target=pnpm-workspace.yaml \
   pnpm ci --omit=dev
 
 COPY --from=builder /app/dist/ ./dist/
